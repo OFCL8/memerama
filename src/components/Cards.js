@@ -29,12 +29,10 @@ const memes = [
 const sources = [...memes, ...memes];
 
 const styles = StyleSheet.create({
-    cards: {
-        backgroundColor: 'green',
-    },
     //Poder darle estilo, necesario con flatlist
     cardsContainer: {
         alignItems: 'center',
+        paddingVertical: 10,
     },
 });
 

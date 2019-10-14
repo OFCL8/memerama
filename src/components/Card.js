@@ -1,13 +1,18 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, View } from 'react-native';
+
+const { width } = Dimensions.get('window');
+const cardWith = (width - 108) / 4
 
 const styles = StyleSheet.create({
     container: {
-
+        borderColor: '#000',
+        borderWidth: 1,
+        margin: 10,
     },
     image: {
-        width: 70,
-        height: 70,
+        width: cardWith,
+        height: cardWith,
     },
 });
 
