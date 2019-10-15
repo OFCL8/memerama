@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, FlatList } from 'react-native';
+import { FlatList, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import Card from './Card';
 import meme0 from '../../assets/0.jpg';
 import meme1 from '../../assets/1.jpg';
@@ -37,13 +37,53 @@ const styles = StyleSheet.create({
 });
 
 class Cards extends React.Component {
+    state = {
+        shownCardsIndexes: [],
+    };
+
     //Se pone guion bajo por que necesitamos el segundo argumento
     keyExtractor = (_, index) => String(index);
     /*keyExtractor = (_, index) => {
         return String(index);
     }*/
-    //Funcion para mostrar cartas
-    renderCard = ({ item }) => <Card source={item} />;
+
+    //Para cuando presiona cada una de las cartas, encapsula el indice para manejarlo y regresar otra funcion por que
+    //onPress debe recibir una funcion
+    onCardPress = (index) => () => {
+
+    };
+
+    //Otra sintaxis
+    //Funcion para mostrar cartas / si no se le pone valor a prop es por que su valor es true
+    /*renderCard = ({ index, item }) => (
+        //Envuelve todo aquello que quieras que tenga la accion
+        <TouchableWithoutFeedback onPress={ this.onCardPress(index)}>
+        <Card 
+            shown={this.state.shownCardsIndexes.includes(index)} 
+            source={item} 
+        />
+        </TouchableWithoutFeedback>
+    );*/
+
+    renderCard = ({ index, item }) => {
+        const onCardPress = () => {
+            this.state.shownCardsIndexes.push(index);
+            this.setState({
+                shownCardsIndexes: [...this.state.shownCardsIndexes, index], //Todo lo que tengas antes, agrega este indice
+            });
+        };
+
+        return (
+        <TouchableWithoutFeedback onPress={onCardPress}>
+            <View>
+                <Card 
+                    shown={this.state.shownCardsIndexes.includes(index)} 
+                    source={item} 
+                />
+            </View>
+        </TouchableWithoutFeedback>
+        );
+    };
 
     render() {
         return (
@@ -51,12 +91,13 @@ class Cards extends React.Component {
                 contentContainerStyle = {styles.cardsContainer}
                 //Arreglo en el que se esta basando
                 data = {sources}
+                //Provocar otro cambio
+                extraData = {this.state.shownCardsIndexes}
                 //Espera funcion para obtener un item y tener key
                 keyExtractor = { this.keyExtractor }
                 numColumns = {4}
                 //Dice que componente se va a usar por cada uno
                 renderItem = { this.renderCard }
-                style = {styles.cards} 
             />
         );
     }
